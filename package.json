@@ -1,0 +1,16 @@
+{
+  "name": "project_1_real_estate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.js",
+  "scripts": {
+    "dev": "nodemon api/api.js",
+    "start": "node api/api.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  }
+}
