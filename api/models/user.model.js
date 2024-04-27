@@ -17,5 +17,18 @@ class User {
       throw new ExpressError(`Error registering user:${e.message}`);
     }
   }
+  static async getUser(username) {
+    try {
+      const result = await db.query(
+        `SELECT user_id as id,password FROM users WHERE username = $1`,
+        [username]
+      );
+      const { password, id } = result.rows[0];
+
+      return { password, id };
+    } catch (e) {
+      throw new ExpressError("User/Password no found");
+    }
+  }
 }
 module.exports = User;

@@ -24,15 +24,38 @@ const register = async (req, res, next) => {
 
     const data = await User.register(username, email, hashedPassword, photo);
 
-    const _token = jwt.sign({ id: data.id }, SECRET_KEY);
+    // const _token = jwt.sign({ id: data.id }, SECRET_KEY);
 
     return res.status(201).json({
       data,
-      _token,
     });
   } catch (e) {
     return next(e);
   }
 };
+const loggin = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      throw new ExpressError("Username and password required", 400);
+    }
+    const user = await User.getUser(username);
+    console.log(user);
+    console.log(password);
+    console.log(user.password);
+    console.log({ id: user.id });
 
-module.exports = { register };
+    if (user) {
+      if (await bcrypt.compare(password, user.password)) {
+        const _token = jwt.sign({ id: user.id }, SECRET_KEY);
+
+        return res.json({ message: "Logged in!", _token });
+      }
+    }
+    throw new ExpressError("Invalid username/password", 400);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+module.exports = { register, loggin };
