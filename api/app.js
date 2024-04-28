@@ -11,6 +11,8 @@ app.use(authenticateJWT);
 
 const authRouter = require("./routes/auth.route.js");
 app.use("/api/auth", authRouter);
+const userRouter = require("./routes/user.route.js");
+app.use("/api/user", userRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
