@@ -9,8 +9,8 @@ const {
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const jsonschema = require("jsonschema");
-const userSchema = require("../schemas/user.schema.json");
-const logginSchema = require("../schemas/loggin.schema.json");
+const userSchema = require("../schemas/user/user.schema.json");
+const logginSchema = require("../schemas/user/loggin.schema.json");
 
 const register = async (req, res, next) => {
   try {

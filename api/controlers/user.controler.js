@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR } = require("../config");
 const User = require("../models/user.model");
 const jsonschema = require("jsonschema");
-const updateUserSchema = require("../schemas/updateUser.schema.json");
+const updateUserSchema = require("../schemas/user/updateUser.schema.json");
 
 const updateUser = async (req, res, next) => {
   if (req.params.id !== req.user.id) {
