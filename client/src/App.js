@@ -6,10 +6,12 @@ import LoggIn from "./pages/LoggIn";
 import LogOut from "./pages/LogOut";
 import Profile from "./pages/Profile";
 import Delete from "./pages/Delete";
+import Header from "./components/Header";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
