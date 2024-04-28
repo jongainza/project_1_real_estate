@@ -8,10 +8,20 @@ const {
 } = require("../config");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const jsonschema = require("jsonschema");
+const userSchema = require("../schemas/user.schema.json");
 
 const register = async (req, res, next) => {
   try {
     let { username, email, password, photo } = req.body;
+    const result = jsonschema.validate(req.body, userSchema);
+
+    if (!result.valid) {
+      // pass validation erros to error handler
+      let listOfErrors = result.errors.map((error) => error.stack);
+      let error = new ExpressError(listOfErrors, 400);
+      return next(error);
+    }
     if (!photo) {
       photo = default_photo_url;
     }

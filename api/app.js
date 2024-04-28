@@ -14,16 +14,6 @@ app.use("/api/auth", authRouter);
 const userRouter = require("./routes/user.route.js");
 app.use("/api/user", userRouter);
 
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
-  return res.json({
-    message,
-    statusCode,
-    success: false,
-  });
-});
-
 // 404 handler
 app.use(function (req, res, next) {
   const err = new ExpressError("Not Found", 404);
@@ -42,6 +32,16 @@ app.use(function (err, req, res, next) {
       message: err.message,
       status: status,
     },
+  });
+});
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  return res.json({
+    message,
+    statusCode,
+    success: false,
   });
 });
 

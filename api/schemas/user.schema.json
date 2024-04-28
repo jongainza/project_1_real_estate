@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": ["username", "email", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "default": "",
+      "title": "The username Schema",
+      "examples": ["manuel"]
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "default": "",
+      "title": "The email Schema",
+      "examples": ["manuel@gmail.com"]
+    },
+    "password": {
+      "type": "string",
+      "minLength": 8,
+      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])",
+      "default": "",
+      "title": "The password Schema",
+      "examples": ["Aa*hdjdr4774"]
+    },
+    "photo": {
+      "type": "string",
+      "default": "",
+      "title": "The photo Schema",
+      "examples": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXHJLVTn98FZ-mf3ETMUWhP8Q5qKetQX5GnOBK55Xl8iftBIHPGxT5rxeMlg\u0026s"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "username": "manuel",
+      "email": "manuel@gmail.com",
+      "password": "Aa*hdjdr4774",
+      "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXHJLVTn98FZ-mf3ETMUWhP8Q5qKetQX5GnOBK55Xl8iftBIHPGxT5rxeMlg\u0026s"
+    }
+  ]
+}
