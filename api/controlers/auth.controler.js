@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const jsonschema = require("jsonschema");
 const userSchema = require("../schemas/user.schema.json");
+const logginSchema = require("../schemas/loggin.schema.json");
 
 const register = async (req, res, next) => {
   try {
@@ -46,6 +47,14 @@ const register = async (req, res, next) => {
 const loggin = async (req, res, next) => {
   try {
     const { username, password } = req.body;
+    const result = jsonschema.validate(req.body, logginSchema);
+
+    if (!result.valid) {
+      // pass validation erros to error handler
+      let listOfErrors = result.errors.map((error) => error.stack);
+      let error = new ExpressError(listOfErrors, 400);
+      return next(error);
+    }
     if (!username || !password) {
       throw new ExpressError("Username and password required", 400);
     }

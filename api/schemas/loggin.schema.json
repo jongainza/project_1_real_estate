@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "loggin Schema",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "default": "",
+      "title": "The username Schema",
+      "examples": ["manuel"]
+    },
+    "password": {
+      "type": "string",
+      "minLength": 8,
+      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])",
+      "default": "",
+      "title": "The password Schema",
+      "examples": ["Aa*hdjdr4774"]
+    }
+  },
+  "examples": [
+    {
+      "username": "manuel",
+      "password": "Aa*hdjdr4774"
+    }
+  ]
+}

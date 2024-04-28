@@ -3,6 +3,8 @@ const ExpressError = require("../expressError");
 const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR } = require("../config");
 const User = require("../models/user.model");
+const jsonschema = require("jsonschema");
+const updateUserSchema = require("../schemas/updateUser.schema.json");
 
 const updateUser = async (req, res, next) => {
   if (req.params.id !== req.user.id) {
@@ -13,6 +15,14 @@ const updateUser = async (req, res, next) => {
     // Assuming req.body contains the form data
     const { username, email, password } = req.body;
 
+    const result = jsonschema.validate(req.body, updateUserSchema);
+
+    if (!result.valid) {
+      // pass validation erros to error handler
+      let listOfErrors = result.errors.map((error) => error.stack);
+      let error = new ExpressError(listOfErrors, 400);
+      return next(error);
+    }
     // Check each field and prepare the data for updating
     const newData = {};
     if (username !== "") {
