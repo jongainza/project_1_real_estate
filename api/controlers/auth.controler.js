@@ -15,6 +15,7 @@ const logginSchema = require("../schemas/user/loggin.schema.json");
 const register = async (req, res, next) => {
   try {
     let { username, email, password, photo } = req.body;
+    console.log(username, email, password);
     const result = jsonschema.validate(req.body, userSchema);
 
     if (!result.valid) {
