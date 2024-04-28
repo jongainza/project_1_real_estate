@@ -42,7 +42,9 @@ export default function App() {
       const response = await axios.post("/auth/register", values);
       if (response.status === 201) {
         console.log("YOU ARE REGISTERED");
-        navigate("/log-in");
+        navigate("/log-in", {
+          state: { username: values.username, password: values.password },
+        });
       } else {
         new Error(response.error);
       }
@@ -103,7 +105,14 @@ export default function App() {
           rules={[
             {
               required: true,
-              pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])",
+              message: "Please input your password!",
+            },
+            {
+              min: 8,
+              message: "Password must be at least 8 characters long",
+            },
+            {
+              pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
               message: "Please input a valid password!",
             },
           ]}
