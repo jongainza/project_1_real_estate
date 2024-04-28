@@ -18,7 +18,7 @@ function Header() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
-        <Navbar.Brand href="#home" className="mr-auto">
+        <Navbar.Brand href="/" className="mr-auto">
           React-Bootstrap
         </Navbar.Brand>
         <div className="d-flex align-items-center justify-content-center flex-grow-1">
@@ -37,13 +37,13 @@ function Header() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link href="/">Home</Nav.Link>
+            {/* <Nav.Link href="/">Home</Nav.Link> */}
             <NavDropdown title="User" id="basic-nav-dropdown">
               {token ? (
                 <NavDropdown.Item href="/profile">
                   <img
                     src={token}
-                    alt="profile"
+                    alt="profile "
                     className="rounded-circle "
                     style={{
                       height: 4 + "rem",
@@ -53,12 +53,12 @@ function Header() {
                     }}
                   />
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="/logout">LogOut</NavDropdown.Item>
+                  <NavDropdown.Item href="/log-out">LogOut</NavDropdown.Item>
                 </NavDropdown.Item>
               ) : (
                 <>
                   <NavDropdown.Item href="/register">Register</NavDropdown.Item>
-                  <NavDropdown.Item href="/signin">SignIn</NavDropdown.Item>
+                  <NavDropdown.Item href="/log-in">SignIn</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item href="/about">About</NavDropdown.Item>
                 </>

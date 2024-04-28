@@ -6,6 +6,8 @@ import LoggIn from "./pages/LoggIn";
 import LogOut from "./pages/LogOut";
 import Profile from "./pages/Profile";
 import Delete from "./pages/Delete";
+import Register from "./pages/Register";
+
 import Header from "./components/Header";
 
 export default function App() {
@@ -19,6 +21,7 @@ export default function App() {
         <Route path="/log-out" element={<LogOut />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/delete" element={<Delete />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
