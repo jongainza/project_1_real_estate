@@ -2,7 +2,10 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const ExpressError = require("./expressError");
-const { authenticateJWT } = require("./middleware/auth.middleware.js");
+const {
+  authenticateJWT,
+  ensureLoggedIn,
+} = require("./middleware/auth.middleware.js");
 
 app.use(express.json());
 
@@ -12,7 +15,7 @@ app.use(authenticateJWT);
 const authRouter = require("./routes/auth.route.js");
 app.use("/api/auth", authRouter);
 const userRouter = require("./routes/user.route.js");
-app.use("/api/user", userRouter);
+app.use("/api/user", ensureLoggedIn, userRouter);
 
 // 404 handler
 app.use(function (req, res, next) {

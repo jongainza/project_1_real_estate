@@ -3,18 +3,13 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { BiSolidSearch } from "react-icons/bi";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 function Header() {
-  //   const { currentUser } = useSelector((state) => state.user);
-  //   console.log({ CurrentUser: currentUser }); // Log the currentUser object
+  const { currentUser } = useSelector((state) => state.user);
 
-  // Check if currentUser exists and contains the photo property
-  // Check if currentUser exists and contains the photo property
-  //   const photoUrl = currentUser?.data?.photo;
-
-  //   console.log(photoUrl);
-  const token = sessionStorage.getItem("token");
-
+  let userPhoto = currentUser.photo;
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
@@ -39,10 +34,10 @@ function Header() {
           <Nav className="ms-auto">
             {/* <Nav.Link href="/">Home</Nav.Link> */}
             <NavDropdown title="User" id="basic-nav-dropdown">
-              {token ? (
+              {userPhoto ? (
                 <NavDropdown.Item href="/profile">
                   <img
-                    src={token}
+                    src={userPhoto}
                     alt="profile "
                     className="rounded-circle "
                     style={{

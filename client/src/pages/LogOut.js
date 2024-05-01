@@ -1,5 +1,27 @@
-import React from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearUserData } from "../redux/user/userSlice";
 
-export default function LogOut() {
-  return <div>logOut</div>;
+function Logout() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Perform cleanup operations before navigating
+    const logout = () => {
+      // Remove the token and the photo
+      dispatch(clearUserData());
+
+      // Navigate to the desired route
+      navigate("/");
+    };
+
+    // Call the logout function
+    logout();
+  }, [navigate]);
+
+  return null; // Since the navigation is handled in useEffect, no need to return any JSX
 }
+
+export default Logout;

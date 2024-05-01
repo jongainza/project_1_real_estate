@@ -21,8 +21,8 @@ const register = async (req, res, next) => {
     if (!result.valid) {
       // pass validation erros to error handler
       let listOfErrors = result.errors.map((error) => error.stack);
-      let error = new ExpressError(listOfErrors, 400);
-      return next(error);
+      let err = new ExpressError(listOfErrors, 400);
+      return next(err);
     }
     if (!photo) {
       photo = default_photo_url;
@@ -53,8 +53,8 @@ const loggin = async (req, res, next) => {
     if (!result.valid) {
       // pass validation erros to error handler
       let listOfErrors = result.errors.map((error) => error.stack);
-      let error = new ExpressError(listOfErrors, 400);
-      return next(error);
+      let err = new ExpressError(listOfErrors, 400);
+      return next(err);
     }
     if (!username || !password) {
       throw new ExpressError("Username and password required", 400);
@@ -68,7 +68,7 @@ const loggin = async (req, res, next) => {
     if (user) {
       if (await bcrypt.compare(password, user.password)) {
         const _token = jwt.sign({ id: user.id }, SECRET_KEY);
-        return res.json({ message: "Logged in!", _token });
+        return res.json({ message: "Logged in!", user, _token });
       }
     }
     throw new ExpressError("Invalid username/password", 400);

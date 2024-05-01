@@ -20,12 +20,12 @@ class User {
   static async getUser(username) {
     try {
       const result = await db.query(
-        `SELECT user_id as id,password FROM users WHERE username = $1`,
+        `SELECT user_id as id,password, photo FROM users WHERE username = $1`,
         [username]
       );
-      const { password, id } = result.rows[0];
+      const { password, id, photo } = result.rows[0];
 
-      return { password, id };
+      return { password, id, photo };
     } catch (e) {
       throw new ExpressError("User/Password no found");
     }

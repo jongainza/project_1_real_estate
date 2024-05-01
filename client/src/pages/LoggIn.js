@@ -4,11 +4,18 @@ import { Button, Checkbox, Form, Input } from "antd";
 import axios from "../helpers/axios.config";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
+import { useDispatch } from "react-redux";
+import {
+  signedInUser,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
-const App = () => {
+const Loggin = () => {
   const location = useLocation();
   const { state } = location;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Check if state contains username and password
   const initialValues =
@@ -19,23 +26,29 @@ const App = () => {
   const onFinish = async (values) => {
     try {
       const response = await axios.post("/auth/loggin", values);
-      // console.log({ response });
-      if (response.status !== 200) {
-        console.error("Error:", response.data.error.message);
-        message.error(response.data.error.message); // Display error message to the user
+      console.log({ response });
+      if (response.status === 200) {
+        console.log("YOU ARE IN!!!");
+        dispatch(
+          signedInUser({
+            currentUser: {
+              id: response.data.user.id,
+              photo: response.data.user.photo,
+            },
+            _token: response.data._token,
+          })
+        );
+        navigate("/about", {});
       } else {
-        let message = response.data.message;
-        // console.log({ message });
-        const _token = response.data._token;
-        sessionStorage.setItem("_token", _token);
-        navigate("/", {});
+        console.error("Error:", response.error.message);
+        message.error(response.error.message); // Display error message to the user
       }
     } catch (error) {
       console.error("Error:", error);
       message.error("Something went wrong"); // Display generic error message to the user
     }
-    // Your form submission logic
   };
+  // Your form submission logic
 
   const onFinishFailed = (error) => {
     console.log("Failed:", error);
@@ -109,4 +122,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Loggin;
