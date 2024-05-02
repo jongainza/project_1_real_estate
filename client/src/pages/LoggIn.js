@@ -7,7 +7,7 @@ import { message } from "antd";
 import { useDispatch } from "react-redux";
 import {
   signedInUser,
-  signInSuccess,
+  signFailure,
   signInFailure,
 } from "../redux/user/userSlice";
 
@@ -33,6 +33,8 @@ const Loggin = () => {
           signedInUser({
             currentUser: {
               id: response.data.user.id,
+              username: response.data.user.username,
+              email: response.data.user.email,
               photo: response.data.user.photo,
             },
             _token: response.data._token,
@@ -40,6 +42,14 @@ const Loggin = () => {
         );
         navigate("/about", {});
       } else {
+        dispatch(
+          signInFailure({
+            currentUser: {
+              error: response.error.message,
+            },
+            _token: response.data._token,
+          })
+        );
         console.error("Error:", response.error.message);
         message.error(response.error.message); // Display error message to the user
       }

@@ -20,12 +20,12 @@ class User {
   static async getUser(username) {
     try {
       const result = await db.query(
-        `SELECT user_id as id,password, photo FROM users WHERE username = $1`,
+        `SELECT user_id as id,password,email,photo FROM users WHERE username = $1`,
         [username]
       );
-      const { password, id, photo } = result.rows[0];
+      const { password, id, photo, email } = result.rows[0];
 
-      return { password, id, photo };
+      return { password, id, photo, email, username };
     } catch (e) {
       throw new ExpressError("User/Password no found");
     }
@@ -85,6 +85,17 @@ class User {
       };
     } catch (err) {
       throw new Error(`Error updating user information: ${err.message}`);
+    }
+  }
+  static async deleteUser(id) {
+    try {
+      const results = await db.query(`DELETE FROM users WHERE user_id=$1`, [
+        id,
+      ]);
+      console.log("user deleted!");
+      return;
+    } catch (e) {
+      throw new ExpressError("Error deleting user");
     }
   }
 }

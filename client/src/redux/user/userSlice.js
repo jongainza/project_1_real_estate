@@ -15,7 +15,7 @@ const userSlice = createSlice({
       state._token = action.payload._token;
       state.error = null;
     },
-    signInFailure: (state, action) => {
+    signFailure: (state, action) => {
       state.error = action.payload;
     },
     clearUserData: (state) => {
