@@ -34,50 +34,34 @@ class User {
   static async updateUser(id, newData) {
     try {
       const { username, email, password, photo } = newData;
+      console.log({ newData });
+      console.log("hello");
 
-      // Initialize arrays to store the SET clauses and parameter values
-      const setClauses = [];
-      const setValues = [];
+      let query = `UPDATE users 
+                 SET username = $1,
+                     email = $2,
+                     photo = $3,
+                     updated_date = CURRENT_TIMESTAMP`;
 
-      // Build the SET clause and parameter values based on the provided data
-      if (username !== undefined) {
-        setClauses.push(`username = $${setValues.length + 1}`);
-        setValues.push(username);
-      }
-      if (email !== undefined) {
-        setClauses.push(`email = $${setValues.length + 1}`);
-        setValues.push(email);
-      }
+      const queryParams = [username, email, photo];
+
+      // Conditionally add password update to the query
       if (password !== undefined) {
-        setClauses.push(`password = $${setValues.length + 1}`);
-        setValues.push(password);
-      }
-      if (photo !== undefined) {
-        setClauses.push(`photo = $${setValues.length + 1}`);
-        setValues.push(photo);
+        query += ", password = $4";
+        queryParams.push(password);
       }
 
-      // Add the updated_date to the SET clause
-      setClauses.push(`updated_date = current_timestamp`);
+      query += ` WHERE user_id = $${queryParams.length + 1}
+               RETURNING user_id as id, username, email, photo`;
 
-      // Construct the UPDATE query
-      const updateQuery = `
-      UPDATE users
-      SET ${setClauses.join(", ")}
-      WHERE user_id = $${setValues.length + 1}
-      RETURNING user_id as id, username, email, photo
-    `;
+      const response = await db.query(query, [...queryParams, id]);
+      console.log("hellp");
 
-      // Add the user_id parameter value
-      setValues.push(id);
-
-      // Execute the query and return the updated user
-      const updateResponse = await db.query(updateQuery, setValues);
-      if (!updateResponse.rows[0]) {
+      if (!response.rows.length) {
         throw new ExpressError(`User with ID ${id} not found`, 404);
       }
 
-      const updatedUser = updateResponse.rows[0];
+      const updatedUser = response.rows[0];
 
       return {
         data: "success",

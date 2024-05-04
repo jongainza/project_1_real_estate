@@ -11,9 +11,9 @@ CREATE TABLE users (
     username VARCHAR(28)  NOT NULL UNIQUE,
     email TEXT   NOT NULL UNIQUE,
     password VARCHAR  NOT NULL,
-    registration_date timestamp with time zone   NOT NULL,
+    registration_date timestamp with time zone ,
     updated_date timestamp with time zone,
-    photo TEXT
+    photo TEXT 
    
     
 );

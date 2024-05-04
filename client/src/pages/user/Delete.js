@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import axios from "../helpers/axios.config";
+import axios from "../../helpers/axios.config";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { clearUserData } from "../redux/user/userSlice";
+import { clearUserData } from "../../redux/user/userSlice";
 
 function Delete() {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { clearUserData } from "../redux/user/userSlice";
+import { clearUserData } from "../../redux/user/userSlice";
 
 function Logout() {
   const dispatch = useDispatch();

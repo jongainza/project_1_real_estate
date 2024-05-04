@@ -8,6 +8,7 @@ function authenticateJWT(req, res, next) {
     const tokenFromBody = req.body._token;
     const payload = jwt.verify(tokenFromBody, SECRET_KEY);
     req.user = payload;
+    console.log({ req_user: req.user });
     console.log("---YOU HAVE A VALID TOKEN!!!---");
     return next();
   } catch (e) {

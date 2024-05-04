@@ -8,23 +8,41 @@ const Profile = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <h1>Profile</h1>
+    <div
+      style={{
+        padding: "3em",
+        maxWidth: "90vw",
+        margin: "0 auto",
+        display: "flex ",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "1em",
+      }}
+    >
+      <h1 style={{ textAlign: "center", padding: "1em" }}>Profile</h1>
       <img
         src={user.currentUser.photo}
         alt="profile"
         className="rounded-circle"
         style={{
-          height: "4rem",
-          width: "4rem",
-          objectFit: "cover",
-          border: "3px solid black",
+          width: "75px",
+          height: "75px",
+          borderRadius: "50%" /* Set 50% for a perfect circle */,
+          objectFit: "cover" /* Maintain aspect ratio */,
+          align: "center",
+          marginBottom: "1em",
         }}
       />
       <h3>Name: {user.currentUser.username}</h3>
       <h3>Email: {user.currentUser.email}</h3>
-      <Button variant="outline-warning" size="sm">
-        Edit User
+      <Button
+        variant="outline-warning"
+        size="sm"
+        onClick={() => {
+          navigate("/update-profile");
+        }}
+      >
+        Update User
       </Button>{" "}
       <Button
         variant="outline-danger"

@@ -1,15 +1,11 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from "antd";
-import axios from "../helpers/axios.config";
+import axios from "../../helpers/axios.config";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 import { useDispatch } from "react-redux";
-import {
-  signedInUser,
-  signFailure,
-  signInFailure,
-} from "../redux/user/userSlice";
+import { signedInUser, signInFailure } from "../../redux/user/userSlice";
 
 const Loggin = () => {
   const location = useLocation();

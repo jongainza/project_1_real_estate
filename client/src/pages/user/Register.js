@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
-import axios from "../helpers/axios.config";
+import axios from "../../helpers/axios.config";
 import { useNavigate } from "react-router-dom";
 
 const formItemLayout = {

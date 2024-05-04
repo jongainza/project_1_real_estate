@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const ExpressError = require("./expressError");
+app.use(cors());
+
 const {
   authenticateJWT,
   ensureLoggedIn,
@@ -9,7 +11,6 @@ const {
 
 app.use(express.json());
 
-app.use(cors());
 app.use(authenticateJWT);
 
 const authRouter = require("./routes/auth.route.js");
