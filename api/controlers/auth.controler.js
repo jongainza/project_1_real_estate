@@ -60,10 +60,10 @@ const loggin = async (req, res, next) => {
       throw new ExpressError("Username and password required", 400);
     }
     const user = await User.getUser(username);
-    console.log({ user });
-    console.log({ password });
-    console.log(user.password);
-    console.log({ id: user.id });
+    // console.log({ user });
+    // console.log({ password });
+    // console.log(user.password);
+    // console.log({ id: user.id });
 
     if (user) {
       if (await bcrypt.compare(password, user.password)) {

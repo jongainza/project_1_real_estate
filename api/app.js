@@ -2,6 +2,12 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const ExpressError = require("./expressError");
+const bodyParser = require("body-parser");
+
+// Parse incoming request bodies in a middleware before your handlers
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+
 app.use(cors());
 
 const {
@@ -17,6 +23,8 @@ const authRouter = require("./routes/auth.route.js");
 app.use("/api/auth", authRouter);
 const userRouter = require("./routes/user.route.js");
 app.use("/api/user", ensureLoggedIn, userRouter);
+const listingRouter = require("./routes/listing.route.js");
+app.use("/api/listing", listingRouter);
 
 // 404 handler
 app.use(function (req, res, next) {

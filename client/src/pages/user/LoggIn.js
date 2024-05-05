@@ -38,6 +38,8 @@ const Loggin = () => {
         );
         navigate("/about", {});
       } else {
+        console.log(response.error.message);
+
         dispatch(
           signInFailure({
             currentUser: {
@@ -51,7 +53,7 @@ const Loggin = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      message.error("Something went wrong"); // Display generic error message to the user
+      message.error(error.response.data.error); // Display generic error message to the user
     }
   };
   // Your form submission logic

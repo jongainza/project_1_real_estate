@@ -80,10 +80,10 @@ const Profile = () => {
         );
         navigate("/");
       } else {
-        new Error(response.error);
+        console.error(response.error.message);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("somthing went wrong");
     }
   };
 
