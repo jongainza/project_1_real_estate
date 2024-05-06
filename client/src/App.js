@@ -9,6 +9,8 @@ import Delete from "./pages/user/Delete";
 import Register from "./pages/user/Register";
 import Header from "./components/Header";
 import UpdateProfile from "./pages/user/UpdateProfile";
+import Listings from "./pages/properties/Listings";
+import CreateListing from "./pages/properties/CreateListing";
 
 export default function App() {
   return (
@@ -23,6 +25,8 @@ export default function App() {
         <Route path="/update-profile" element={<UpdateProfile />} />
         <Route path="/delete" element={<Delete />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/listings" element={<Listings />} />
+        <Route path="/create-listing" element={<CreateListing />} />
       </Routes>
     </BrowserRouter>
   );
