@@ -4,7 +4,6 @@ const ExpressError = require("../expressError");
 class Listing {
   static async create(id, fields) {
     try {
-      //   id = 1;
       console.log({ id, fields });
       const results = await db.query(
         `INSERT INTO property (title,info,street,number,city,state,country,zip_code,price,bedrooms,bathrooms,garage,user_id)  

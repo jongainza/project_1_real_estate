@@ -22,8 +22,7 @@ const create = async (req, res, next) => {
       garage,
       images, // Assuming all image URLs are passed in an array
     } = req.body;
-    const id = 1;
-    // const id = req.user;
+    const id = req.user;
     // Validate request body against JSON schema
     const result = jsonschema.validate(req.body, createListingSchema);
     if (!result.valid) {
