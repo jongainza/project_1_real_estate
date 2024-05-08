@@ -29,9 +29,7 @@
     "price": {
       "type": "integer"
     },
-    "area": {
-      "type": "string"
-    },
+
     "bedrooms": {
       "type": "integer"
     },
@@ -39,13 +37,13 @@
       "type": "integer"
     },
     "garage": {
-      "type": "string"
+      "type": "boolean"
     },
     "images": {
-      "type": "array",
-      "minItems": 6,
-      "maxItems": 12,
-      "items": { "type": "string" }
+      "type": ["array", "string"],
+      "items": {
+        "anyOf": [{ "type": "string" }, { "type": "object" }]
+      }
     }
   },
   "required": [
@@ -58,7 +56,6 @@
     "country",
     "zip_code",
     "price",
-    "area",
     "bedrooms",
     "bathrooms",
     "garage",

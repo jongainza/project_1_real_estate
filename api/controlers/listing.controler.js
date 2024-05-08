@@ -16,13 +16,12 @@ const create = async (req, res, next) => {
       country,
       zip_code,
       price,
-      area,
       bedrooms,
       bathrooms,
       garage,
       images, // Assuming all image URLs are passed in an array
     } = req.body;
-    const id = req.user;
+    const { id } = req.user;
     // Validate request body against JSON schema
     const result = jsonschema.validate(req.body, createListingSchema);
     if (!result.valid) {
@@ -30,24 +29,24 @@ const create = async (req, res, next) => {
       let err = new ExpressError(listOfErrors, 400);
       return next(err);
     }
-
+    console.log(req.body);
     // Ensure required fields are provided
-    const requiredFields = [
-      title,
-      street,
-      number,
-      city,
-      state,
-      country,
-      zip_code,
-      price,
-      bedrooms,
-      bathrooms,
-      garage,
-    ];
-    if (requiredFields.some((field) => !field)) {
-      throw new ExpressError("Missing required fields", 400);
-    }
+    // const requiredFields = [
+    //   title,
+    //   street,
+    //   number,
+    //   city,
+    //   state,
+    //   country,
+    //   zip_code,
+    //   price,
+    //   bedrooms,
+    //   bathrooms,
+    //   garage,
+    // ];
+    // if (requiredFields.some((field) => !field)) {
+    //   throw new ExpressError("Missing required fields", 400);
+    // }
 
     // Assuming Listing.create() method returns the newly created listing
     const listing = await Listing.create(id, {
@@ -60,7 +59,6 @@ const create = async (req, res, next) => {
       country,
       zip_code,
       price,
-      area,
       bedrooms,
       bathrooms,
       garage,
