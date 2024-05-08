@@ -11,6 +11,7 @@ import Header from "./components/Header";
 import UpdateProfile from "./pages/user/UpdateProfile";
 import Listings from "./pages/properties/Listings";
 import CreateListing from "./pages/properties/CreateListing";
+import LoggedUser from "./components/LoggedUser";
 
 export default function App() {
   return (
@@ -20,13 +21,17 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/log-in" element={<LoggIn />} />
-        <Route path="/log-out" element={<LogOut />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/update-profile" element={<UpdateProfile />} />
-        <Route path="/delete" element={<Delete />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/listings" element={<Listings />} />
-        <Route path="/create-listing" element={<CreateListing />} />
+        {/* protected route for profile page */}
+
+        <Route element={<LoggedUser />}>
+          <Route path="/log-out" element={<LogOut />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/update-profile" element={<UpdateProfile />} />
+          <Route path="/delete" element={<Delete />} />
+          <Route path="/listings" element={<Listings />} />
+          <Route path="/create-listing" element={<CreateListing />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
