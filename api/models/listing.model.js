@@ -4,8 +4,8 @@ const ExpressError = require("../expressError");
 class Listing {
   static async create(id, fields) {
     try {
-      console.log({ id });
-      console.log({ id, fields });
+      // console.log({ id });
+      // console.log({ id, fields });
       const results = await db.query(
         `INSERT INTO property (title,info,street,number,city,state,country,zip_code,price,bedrooms,bathrooms,garage,user_id)  
             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
@@ -43,6 +43,39 @@ class Listing {
       return { listing, imageResults };
     } catch (e) {
       throw new ExpressError(`Error registering user:${e.message}`);
+    }
+  }
+  static async get(id) {
+    try {
+      const results = await db.query(
+        `SELECT 
+    p.property_id,
+    p.title,
+    p.info,
+    p.street,
+    p.number,
+    p.city,
+    p.state,
+    p.country,
+    p.zip_code,
+    p.price,
+    p.bedrooms,
+    p.bathrooms,
+    p.garage,
+    ARRAY_AGG(i.image_url) AS image_urls
+FROM 
+    property p
+JOIN 
+    images i ON p.property_id = i.property_id
+WHERE 
+    p.user_id = $1
+GROUP BY 
+    p.property_id;`,
+        [id]
+      );
+      return results;
+    } catch (e) {
+      return e;
     }
   }
 }

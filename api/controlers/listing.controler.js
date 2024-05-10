@@ -70,5 +70,15 @@ const create = async (req, res, next) => {
     return next(error);
   }
 };
+const get = async (req, res, next) => {
+  try {
+    // const { id } = req.user;
+    let id = 11;
+    if (!id) throw new ExpressError("loggin required", 400);
 
-module.exports = { create };
+    const results = await Listing.get(id);
+    return res.status(200).json({ data: results.rows });
+  } catch (e) {}
+};
+
+module.exports = { create, get };
