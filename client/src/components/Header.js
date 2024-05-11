@@ -8,8 +8,24 @@ import { useSelector } from "react-redux";
 
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
-
   let userPhoto = currentUser.photo;
+
+  const dropdownTitle = userPhoto ? (
+    <img
+      src={userPhoto}
+      alt="profile"
+      className="rounded-circle"
+      style={{
+        height: "4rem",
+        width: "4rem",
+        objectFit: "cover",
+        border: "3px solid black",
+      }}
+    />
+  ) : (
+    "User"
+  );
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
@@ -33,24 +49,15 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             {/* <Nav.Link href="/">Home</Nav.Link> */}
-            <NavDropdown title="User" id="basic-nav-dropdown">
-              {userPhoto ? (
-                <NavDropdown.Item href="/profile">
-                  <img
-                    src={userPhoto}
-                    alt="profile "
-                    className="rounded-circle "
-                    style={{
-                      height: 4 + "rem",
-                      width: 4 + "rem",
-                      objectFit: "cover",
-                      border: "3px solid black",
-                    }}
-                  />
+            <NavDropdown title={dropdownTitle} id="basic-nav-dropdown">
+              {userPhoto && (
+                <>
+                  <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item href="/log-out">LogOut</NavDropdown.Item>
-                </NavDropdown.Item>
-              ) : (
+                </>
+              )}
+              {!userPhoto && (
                 <>
                   <NavDropdown.Item href="/register">Register</NavDropdown.Item>
                   <NavDropdown.Item href="/log-in">SignIn</NavDropdown.Item>
