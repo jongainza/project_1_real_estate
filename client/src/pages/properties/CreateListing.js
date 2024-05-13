@@ -2,13 +2,23 @@ import React, { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import axios from "../../helpers/axios.config";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+  getStorage,
+} from "@firebase/storage";
+import { app } from "../../firebase";
 
 export default function CreateListing() {
   const [bedrooms, setBedrooms] = useState(0);
   const [bathrooms, setBathrooms] = useState(0);
   const [photos, setPhotos] = useState([]);
   const { _token } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const [uploading, setUploading] = useState(false); // State to track whether images are being uploaded
+  const [error, setError] = useState(""); // State for error message
 
   const [formData, setFormData] = useState({
     _token,
@@ -26,51 +36,68 @@ export default function CreateListing() {
     price: "",
     images: [],
   });
-  //   console.log({ photos });
-  //   console.log({ formData });
-  const navigate = useNavigate();
-  // Function to convert a File object to a data URL
-  const fileToDataURL = (file) => {
+
+  const handleImageUpload = async () => {
+    setUploading(true);
+    console.log({ photos });
+    if (photos.length >= 6 && photos.length <= 12) {
+      const promises = [];
+      for (let i = 0; i < photos.length; i++) {
+        promises.push(storeImage(photos[i]));
+      }
+      await Promise.all(promises);
+      setUploading(false);
+    }
+  };
+
+  const storeImage = async (photo) => {
+    const storage = getStorage(app);
+    const photoName = photo.name;
+    const storageRef = ref(storage, photoName);
+    const uploadTask = uploadBytesResumable(storageRef, photo);
+
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+      uploadTask.on(
+        "state_changed",
+        null,
+        (error) => reject(error),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref)
+            .then((downloadURL) => {
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                images: [...prevFormData.images, downloadURL],
+              }));
+              resolve(downloadURL);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        }
+      );
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (photos.length >= 6 && photos.length <= 12) {
-      try {
-        const imageUrls = await Promise.all(photos.map(fileToDataURL));
-        console.log("Image URLs:", imageUrls);
-
-        // setFormData((prevFormData) => ({
-        //   ...prevFormData,
-        //   images: imageUrls,
-        // }));
-        const updatedFormData = {
-          ...formData,
-          images: imageUrls,
-        };
-        console.log("Updated FormData:", updatedFormData);
-
-        console.log({ formData });
-        const response = await axios.post("/listing/create", updatedFormData);
-        if (response.status === 201) {
-          console.log("LISTING CREATED");
-          navigate("/listings");
-        } else {
-          throw new Error(response.error);
-        }
-      } catch (error) {
-        console.error("Error:", error);
+    try {
+      if (photos.length < 6) {
+        setError("Please upload at least six images");
+        return; // Prevent form submission if no images are selected
       }
-    } else {
-      alert("Please upload between 6 and 12 photos.");
+      console.log({ formData });
+      const response = await axios.post("/listing/create", formData);
+      if (response.status === 201) {
+        console.log("LISTING CREATED");
+        navigate("/listings");
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
+
   return (
     <div>
       <h1 style={{ textAlign: "center", padding: 30 }}>Create Listing</h1>
@@ -254,21 +281,20 @@ export default function CreateListing() {
         />
         <div style={{ display: "flex", gap: 16, padding: 20 }}>
           <input
-            // onChange={(e) => {
-            //   const newPhotos = [...photos, ...e.target.files];
-            //   if (newPhotos.length <= 12) {
-            //     setPhotos(newPhotos);
-            //   }
-            // }}
             type="file"
             id="images"
             accept="image/*"
             multiple
+            onChange={(e) => {
+              setPhotos(e.target.files);
+            }}
             style={{ border: "solid", padding: 3, borderRadius: 8 }}
           />
           <button
             style={{ padding: 3, borderRadius: 8 }}
+            type="button"
             onClick={(e) => {
+              handleImageUpload();
               e.preventDefault();
               const newPhotos = [
                 ...photos,
@@ -282,8 +308,14 @@ export default function CreateListing() {
             Upload
           </button>
         </div>
-        <button type="submit" style={{ padding: 3, borderRadius: 8 }}>
-          CREATE
+        {/* Error message */}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <button
+          type="submit"
+          style={{ padding: 3, borderRadius: 8 }}
+          disabled={uploading}
+        >
+          {uploading ? "UPLOADING..." : "CREATE"}
         </button>
       </form>
     </div>

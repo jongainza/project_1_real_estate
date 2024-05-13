@@ -3,7 +3,6 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { BiSolidSearch } from "react-icons/bi";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 function Header() {
@@ -16,8 +15,8 @@ function Header() {
       alt="profile"
       className="rounded-circle"
       style={{
-        height: "4rem",
-        width: "4rem",
+        height: "2rem",
+        width: "2rem",
         objectFit: "cover",
         border: "3px solid black",
       }}

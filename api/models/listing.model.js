@@ -73,6 +73,7 @@ GROUP BY
     p.property_id;`,
         [id]
       );
+      console.log({ results });
       return results;
     } catch (e) {
       return e;

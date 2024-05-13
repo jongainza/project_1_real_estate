@@ -54,14 +54,17 @@ export default function App() {
   };
   return (
     <>
-      <h1> REGISTER </h1>
+      <h1 style={{ textAlign: "center", padding: 30 }}> REGISTER </h1>
       <Form
         {...formItemLayout}
         form={form}
         name="register"
         onFinish={onFinish}
         style={{
-          maxWidth: 600,
+          alignItems: "center",
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
         }}
         scrollToFirstError
       >

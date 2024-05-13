@@ -72,8 +72,7 @@ const create = async (req, res, next) => {
 };
 const get = async (req, res, next) => {
   try {
-    // const { id } = req.user;
-    let id = 11;
+    const { id } = req.user;
     if (!id) throw new ExpressError("loggin required", 400);
 
     const results = await Listing.get(id);

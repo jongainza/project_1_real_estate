@@ -88,8 +88,8 @@ const Profile = () => {
   };
 
   return (
-    <>
-      <h1>Update Profile</h1>
+    <div style={{ textAlign: "center", padding: 30 }}>
+      <h1 style={{ textAlign: "center", padding: 30 }}>Update Profile</h1>
       <Form
         {...formItemLayout}
         form={form}
@@ -212,7 +212,7 @@ const Profile = () => {
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
 };
 
