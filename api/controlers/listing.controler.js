@@ -77,7 +77,9 @@ const get = async (req, res, next) => {
 
     const results = await Listing.get(id);
     return res.status(200).json({ data: results.rows });
-  } catch (e) {}
+  } catch (e) {
+    return next(e);
+  }
 };
 
 module.exports = { create, get };

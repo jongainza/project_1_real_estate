@@ -12,9 +12,12 @@ import UpdateProfile from "./pages/user/UpdateProfile";
 import Listings from "./pages/properties/Listings";
 import CreateListing from "./pages/properties/CreateListing";
 import LoggedUser from "./components/LoggedUser";
+// import { Provider } from "react-redux"; // Import Provider
+// import { store } from "./redux/store"; // Import your Redux store
 
 export default function App() {
   return (
+    // <Provider store={store}>
     <BrowserRouter>
       <Header />
       <Routes>
@@ -34,5 +37,6 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    // </Provider>
   );
 }
