@@ -34,6 +34,22 @@ export default function Listings() {
   useEffect(() => {
     console.log({ listings });
   }, [listings]);
+
+  const handleDeleteListing = async (id) => {
+    try {
+      const response = await axios.delete(`/listing/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${_token}`, // Pass token in request headers
+        },
+      });
+      console.log(response);
+      setListings((prev) =>
+        prev.filter((listing) => listing.property_id !== id)
+      );
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   return (
     <div
       style={{
@@ -92,8 +108,8 @@ export default function Listings() {
               <Button
                 type="primary"
                 size="small"
-                href="/delete-listing"
                 danger="true"
+                onClick={() => handleDeleteListing(listing.property_id)}
               >
                 Delete
               </Button>{" "}

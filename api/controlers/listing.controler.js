@@ -82,4 +82,25 @@ const get = async (req, res, next) => {
   }
 };
 
-module.exports = { create, get };
+const deleteListing = async (req, res, next) => {
+  console.log({ requestedUser: req.user });
+  const listing = await Listing.findListing(req.params.id);
+  console.log({ listing });
+  if (!listing) {
+    return next(new ExpressError("listing not found", 404));
+  }
+  if (req.user.id !== listing.user_id) {
+    console.log(req.user.id);
+    console.log(listing.user_id);
+    return next(new ExpressError("Unable to delete this listing", 401));
+  }
+
+  try {
+    await Listing.deleteListing(req.params.id);
+    return res.status(204).json({ message: "Listing deleted sucesfully" });
+  } catch (e) {
+    next(error);
+  }
+};
+
+module.exports = { create, get, deleteListing };

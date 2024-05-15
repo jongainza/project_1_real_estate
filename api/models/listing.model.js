@@ -45,6 +45,7 @@ class Listing {
       throw new ExpressError(`Error registering user:${e.message}`);
     }
   }
+  // gets all the listings from one user
   static async get(id) {
     try {
       const results = await db.query(
@@ -77,6 +78,50 @@ GROUP BY
       return results;
     } catch (e) {
       return e;
+    }
+  }
+  static async findListing(id) {
+    try {
+      const results = await db.query(
+        `SELECT 
+    p.user_id,
+    p.title,
+    p.info,
+    p.street,
+    p.number,
+    p.city,
+    p.state,
+    p.country,
+    p.zip_code,
+    p.price,
+    p.bedrooms,
+    p.bathrooms,
+    p.garage,
+    i.image_url
+FROM 
+    property p
+JOIN 
+    images i ON p.property_id = i.property_id
+WHERE 
+    p.property_id = $1`,
+        [id]
+      );
+      console.log({ results: results.rows[0].user_id });
+      return results.rows[0];
+    } catch (e) {
+      return e;
+    }
+  }
+  static async deleteListing(id) {
+    try {
+      const results = await db.query(
+        `DELETE FROM property WHERE property_id=$1`,
+        [id]
+      );
+      console.log("listing deleted!");
+      return;
+    } catch (e) {
+      throw new ExpressError("Error deleting user");
     }
   }
 }
