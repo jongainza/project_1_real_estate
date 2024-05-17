@@ -1,5 +1,6 @@
 const ExpressError = require("../expressError");
 const Listing = require("../models/listing.model");
+const Image = require("../models/image.model");
 const jsonschema = require("jsonschema");
 const createListingSchema = require("../schemas/listing/createListing.schema.json");
 
@@ -102,5 +103,33 @@ const deleteListing = async (req, res, next) => {
     next(error);
   }
 };
+const updateListing = async (req, res, next) => {
+  const { listingId } = req.params;
+  const { updatedFields } = req.body;
+  const listing = await Listing.findListing(listingId);
+  if (!listing) {
+    return next(new ExpressError("listing not found", 404));
+  }
+  if (req.user.id !== listing.user_id) {
+    return next(new ExpressError("not authorized to modify this listing", 401));
+  }
+  try {
+    // Check if updatedFields includes images
+    if (updatedFields.images) {
+      const images = updatedFields.images;
+      // Iterate over the images array and insert each image into the images table
+      for (const imageUrl of images) {
+        await Image.insertImage(listingId, imageUrl); // You need to implement this method in your Listing model
+      }
+      // Remove images from updatedFields since they've been processed separately
+      delete updatedFields.images;
+    }
+    // Update the remaining fields in the property table
+    const updatedListing = await Listing.update(listingId, updatedFields);
+    res.status(200).json(updatedListing);
+  } catch (e) {
+    next(e);
+  }
+};
 
-module.exports = { create, get, deleteListing };
+module.exports = { create, get, deleteListing, updateListing };

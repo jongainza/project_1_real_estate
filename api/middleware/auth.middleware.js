@@ -5,7 +5,8 @@ const ExpressError = require("../expressError");
 // Auth jwt, add auth'd user (if any) to req.
 function authenticateJWT(req, res, next) {
   try {
-    console.log({ request: req.body });
+    // console.log({ request: req.body });
+    console.log({ token: req.body._token });
     const tokenFromBody =
       req.body._token || req.headers.authorization.split(" ")[1];
     console.log({ tokenFromBody });

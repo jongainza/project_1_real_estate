@@ -16,6 +16,7 @@ function Delete() {
   useEffect(() => {
     async function deleteUser() {
       try {
+        console.log(values);
         const response = await axios.post("/user/delete", values);
         if (response.status === 204) {
           dispatch(clearUserData());

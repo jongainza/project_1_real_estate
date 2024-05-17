@@ -80,6 +80,7 @@ GROUP BY
       return e;
     }
   }
+  // finds a listing by id
   static async findListing(id) {
     try {
       const results = await db.query(
@@ -124,5 +125,33 @@ WHERE
       throw new ExpressError("Error deleting user");
     }
   }
+  static async updateListing(listingId, updatedFields) {
+    try {
+      // Construct the SET clause dynamically based on updatedFields
+      const setClause = Object.keys(updatedFields)
+        .map((key, index) => `${key} = $${index + 1}`)
+        .join(", ");
+
+      // Prepare the values array for parameterized query
+      const values = Object.values(updatedFields);
+      values.push(listingId); // Add the listingId as the last parameter
+
+      // Construct the SQL query dynamically
+      const query = {
+        text: `UPDATE property SET ${setClause} WHERE property_id = $${values.length}`,
+        values,
+      };
+
+      // Execute the query
+      const results = await db.query(query);
+
+      console.log(`Listing with ID ${listingId} updated successfully`);
+      return results.rows[0];
+    } catch (error) {
+      console.error(`Error updating listing with ID ${listingId}:`, error);
+      throw new Error(`Error updating listing with ID ${listingId}`);
+    }
+  }
 }
+
 module.exports = Listing;
