@@ -102,9 +102,11 @@ export default function Listings() {
                 gap: "1em",
               }}
             >
-              <Button type="primary" size="small" href="/update-listing">
-                Update
-              </Button>
+              <Link to={`/update-listing/${listing.property_id}`}>
+                <Button type="primary" size="small">
+                  Update
+                </Button>
+              </Link>
               <Button
                 type="primary"
                 size="small"

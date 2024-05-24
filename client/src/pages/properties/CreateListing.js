@@ -10,6 +10,7 @@ import {
   getStorage,
 } from "@firebase/storage";
 import { app } from "../../firebase";
+import { Button, ConfigProvider, Flex, Space } from "antd";
 
 export default function CreateListing() {
   const [bedrooms, setBedrooms] = useState(0);
@@ -36,11 +37,17 @@ export default function CreateListing() {
     price: "",
     images: [],
   });
+  // Function to handle image deletion
+  const handleDeleteImage = (index) => {
+    const newImages = [...formData.images];
+    newImages.splice(index, 1); // Remove the image at the specified index
+    setFormData({ ...formData, images: newImages });
+  };
 
   const handleImageUpload = async () => {
     setUploading(true);
     console.log({ photos });
-    if (photos.length >= 6 && photos.length <= 12) {
+    if (photos.length > 0 && photos.length <= 12) {
       const promises = [];
       for (let i = 0; i < photos.length; i++) {
         promises.push(storeImage(photos[i]));
@@ -86,6 +93,7 @@ export default function CreateListing() {
         return; // Prevent form submission if no images are selected
       }
       console.log({ formData });
+      console.log({ bathrooms: formData.bathrooms });
       const response = await axios.post("/listing/create", formData);
       if (response.status === 201) {
         console.log("LISTING CREATED");
@@ -223,8 +231,9 @@ export default function CreateListing() {
               max="25"
               value={bedrooms}
               onChange={(e) => {
-                setBedrooms(parseInt(e.target.value));
-                setFormData({ ...formData, bedrooms: bedrooms });
+                const value = parseInt(e.target.value);
+                setBedrooms(value);
+                setFormData({ ...formData, bedrooms: value });
               }}
               step="1"
               id="bedrooms"
@@ -239,9 +248,9 @@ export default function CreateListing() {
               max="25"
               value={bathrooms}
               onChange={(e) => {
-                setBathrooms(parseInt(e.target.value));
-
-                setFormData({ ...formData, bathrooms: bathrooms });
+                const value = parseInt(e.target.value);
+                setBathrooms(value);
+                setFormData({ ...formData, bathrooms: value });
               }}
               step="1"
               id="bathrooms"
@@ -307,6 +316,59 @@ export default function CreateListing() {
           >
             Upload
           </button>
+        </div>
+        {/* Display preloaded images */}
+        <div>
+          {formData.images.length > 0 && (
+            <div
+              style={{
+                padding: "1em",
+                maxWidth: "90vw",
+                margin: "0 auto",
+                display: "flex ",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "1em",
+              }}
+            >
+              <h4>Loaded Images</h4>
+              <div
+                style={{
+                  padding: "1em",
+                  maxWidth: "90vw",
+                  margin: "0 auto",
+                  display: "flex ",
+                  gap: "2em",
+                }}
+              >
+                {formData.images.map((image, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1em",
+                    }}
+                  >
+                    <img
+                      src={image}
+                      alt={`Image ${index}`}
+                      width={100}
+                      height={100}
+                    />
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() => handleDeleteImage(index)}
+                      danger="true"
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         {/* Error message */}
         {error && <p style={{ color: "red" }}>{error}</p>}

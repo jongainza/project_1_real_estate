@@ -80,39 +80,99 @@ GROUP BY
       return e;
     }
   }
+  //   // finds a listing by id
+  //   static async findListing(id) {
+  //     try {
+  //       const results = await db.query(
+  //         `SELECT
+  //     p.user_id,
+  //     p.title,
+  //     p.info,
+  //     p.street,
+  //     p.number,
+  //     p.city,
+  //     p.state,
+  //     p.country,
+  //     p.zip_code,
+  //     p.price,
+  //     p.bedrooms,
+  //     p.bathrooms,
+  //     p.garage,
+  //     i.image_url
+  // FROM
+  //     property p
+  // JOIN
+  //     images i ON p.property_id = i.property_id
+  // WHERE
+  //     p.property_id = $1`,
+  //         [id]
+  //       );
+  //       console.log(id);
+  //       // let response = results.rows[0];
+  //       // console.log({ results: results.rows[0] });
+
+  //       return results;
+  //     } catch (e) {
+  //       return e;
+  //     }
+  //   }
   // finds a listing by id
   static async findListing(id) {
     try {
-      const results = await db.query(
+      // Query for the property details
+      const propertyResult = await db.query(
         `SELECT 
-    p.user_id,
-    p.title,
-    p.info,
-    p.street,
-    p.number,
-    p.city,
-    p.state,
-    p.country,
-    p.zip_code,
-    p.price,
-    p.bedrooms,
-    p.bathrooms,
-    p.garage,
-    i.image_url
-FROM 
-    property p
-JOIN 
-    images i ON p.property_id = i.property_id
-WHERE 
-    p.property_id = $1`,
+          p.user_id,
+          p.title,
+          p.info,
+          p.street,
+          p.number,
+          p.city,
+          p.state,
+          p.country,
+          p.zip_code,
+          p.price,
+          p.bedrooms,
+          p.bathrooms,
+          p.garage
+       FROM 
+          property p
+       WHERE 
+          p.property_id = $1`,
         [id]
       );
-      console.log({ results: results.rows[0].user_id });
-      return results.rows[0];
+      // console.log({ propertyResult });
+      // If no property is found, return an appropriate response
+      if (propertyResult.rows.length === 0) {
+        return { error: "Property not found" };
+      }
+
+      const property = propertyResult.rows[0];
+      console.log({ property });
+
+      // Query for the images
+      const imagesResult = await db.query(
+        `SELECT 
+          i.image_url
+       FROM 
+          images i
+       WHERE 
+          i.property_id = $1`,
+        [id]
+      );
+      console.log({ imagesResult });
+      // Combine the property details and images
+      const listing = {
+        ...property,
+        images: imagesResult.rows.map((row) => row.image_url),
+      };
+      console.log({ listing });
+      return listing;
     } catch (e) {
       return e;
     }
   }
+
   static async deleteListing(id) {
     try {
       const results = await db.query(
@@ -127,6 +187,7 @@ WHERE
   }
   static async updateListing(listingId, updatedFields) {
     try {
+      console.log({ updatedFields });
       // Construct the SET clause dynamically based on updatedFields
       const setClause = Object.keys(updatedFields)
         .map((key, index) => `${key} = $${index + 1}`)

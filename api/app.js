@@ -24,7 +24,9 @@ app.use("/api/auth", authRouter);
 const userRouter = require("./routes/user.route.js");
 app.use("/api/user", ensureLoggedIn, userRouter);
 const listingRouter = require("./routes/listing.route.js");
-app.use("/api/listing", ensureLoggedIn, listingRouter);
+app.use("/api/listing", listingRouter);
+const bidRouter = require("./routes/bid.route.js");
+app.use("/api/bid", ensureLoggedIn, bidRouter);
 
 // 404 handler
 app.use(function (req, res, next) {

@@ -12,6 +12,8 @@ import UpdateProfile from "./pages/user/UpdateProfile";
 import Listings from "./pages/properties/Listings";
 import CreateListing from "./pages/properties/CreateListing";
 import LoggedUser from "./components/LoggedUser";
+import UpdateListing from "./pages/properties/UpdatedListing";
+import Listing from "./pages/properties/Listing";
 // import { Provider } from "react-redux"; // Import Provider
 // import { store } from "./redux/store"; // Import your Redux store
 
@@ -25,6 +27,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/log-in" element={<LoggIn />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/listing/:id" element={<Listing />} />
         {/* protected route for profile page */}
 
         <Route element={<LoggedUser />}>
@@ -34,6 +37,7 @@ export default function App() {
           <Route path="/delete" element={<Delete />} />
           <Route path="/listings" element={<Listings />} />
           <Route path="/create-listing" element={<CreateListing />} />
+          <Route path="/update-listing/:id" element={<UpdateListing />} />
         </Route>
       </Routes>
     </BrowserRouter>

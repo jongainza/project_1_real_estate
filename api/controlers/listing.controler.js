@@ -71,6 +71,7 @@ const create = async (req, res, next) => {
     return next(error);
   }
 };
+// get the listings of a user
 const get = async (req, res, next) => {
   try {
     const { id } = req.user;
@@ -104,9 +105,13 @@ const deleteListing = async (req, res, next) => {
   }
 };
 const updateListing = async (req, res, next) => {
-  const { listingId } = req.params;
-  const { updatedFields } = req.body;
+  const listingId = req.params.id;
+  console.log({ listingId });
+  const updatedFields = req.body;
+  console.log({ updatedFields });
   const listing = await Listing.findListing(listingId);
+  // console.log({ listing });
+  //   console.log({ reqUser: req.user.id });
   if (!listing) {
     return next(new ExpressError("listing not found", 404));
   }
@@ -125,11 +130,29 @@ const updateListing = async (req, res, next) => {
       delete updatedFields.images;
     }
     // Update the remaining fields in the property table
-    const updatedListing = await Listing.update(listingId, updatedFields);
+    console.log("hello");
+    delete updatedFields._token;
+    const updatedListing = await Listing.updateListing(
+      listingId,
+      updatedFields
+    );
     res.status(200).json(updatedListing);
   } catch (e) {
     next(e);
   }
 };
+const findListing = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    console.log({ id });
+    const result = await Listing.findListing(id);
+    console.log({ result });
+    // let listing = result.rows[0];
+    // console.log({ listing });
+    res.status(200).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
 
-module.exports = { create, get, deleteListing, updateListing };
+module.exports = { create, get, deleteListing, updateListing, findListing };
