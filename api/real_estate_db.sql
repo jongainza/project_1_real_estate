@@ -45,7 +45,8 @@ CREATE TABLE property (
     image_url TEXT NOT NULL
 );
 
-
+-- Create ENUM type
+CREATE TYPE bid_state AS ENUM ('active', 'cancelled', 'accepted', 'rejected');
 -- DROP TABLE IF EXISTS bid;
 
 CREATE TABLE bid (
@@ -53,9 +54,12 @@ CREATE TABLE bid (
     amount INTEGER   NOT NULL,
     bid_date DATE  NOT NULL,
     user_id INTEGER   NOT NULL REFERENCES users ON DELETE CASCADE,
-    property_id INTEGER   NOT NULL REFERENCES property ON DELETE CASCADE
+    property_id INTEGER   NOT NULL REFERENCES property ON DELETE CASCADE,
+    state bid_state DEFAULT 'active' NOT NULL
+
 
 );
+
 
 -- DROP TABLE IF EXISTS transaction;
 
@@ -66,8 +70,9 @@ CREATE TABLE transaction (
     seller_id INTEGER   NOT NULL REFERENCES users ON DELETE CASCADE,
     property_id INTEGER   NOT NULL REFERENCES property ON DELETE CASCADE,
     bid_id INTEGER   NOT NULL REFERENCES bid ON  DELETE CASCADE
- 
 );
+ 
+
 
 
 

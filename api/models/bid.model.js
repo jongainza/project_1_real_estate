@@ -20,5 +20,20 @@ class Bid {
       throw new ExpressError(`Error registering offer:${e.message}`);
     }
   }
+  static async get(property_id) {
+    try {
+      console.log({ property_id });
+
+      const result = await db.query(`SELECT * FROM bid WHERE property_id=$1`, [
+        property_id,
+      ]);
+      console.log({ result });
+      const bid = result.rows[0];
+      console.log({ bid });
+      return { bid };
+    } catch (e) {
+      throw new ExpressError(`Error registering offer:${e.message}`);
+    }
+  }
 }
 module.exports = Bid;

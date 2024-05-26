@@ -33,4 +33,17 @@ const createBid = async (req, res, next) => {
     return next(error);
   }
 };
-module.exports = { createBid };
+const getBid = async (req, res, next) => {
+  // console.log({ prop_id: req.params.property_id });
+  const property_id = parseInt(req.params.property_id, 10);
+  // console.log({ property_id });
+  try {
+    const bid = await Bid.get(property_id);
+
+    return res.status(201).json({ data: bid });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = { createBid, getBid };

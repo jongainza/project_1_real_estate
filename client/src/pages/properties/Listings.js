@@ -7,56 +7,85 @@ import { Button } from "antd";
 export default function Listings() {
   const user = useSelector((state) => state.user);
   const _token = user._token;
-  console.log({ _token });
   const [listings, setListings] = useState([]);
+  const [bidsStatus, setBidsStatus] = useState({});
   const [listingsError, setListingsError] = useState(false);
+
   useEffect(() => {
     async function getListings() {
       try {
         const response = await axios.get("/listing/get", {
           headers: {
-            Authorization: `Bearer ${_token}`, // Pass token in request headers
+            Authorization: `Bearer ${_token}`,
           },
         });
-        console.log({ response: response.data.data });
-        // const data = await response.data.data.json();
-        setListings(response.data.data);
-        // console.log({ listings });
-        // console.log({ response });
+        const listingsData = response.data.data;
+        setListings(listingsData);
+
+        const bidsPromises = listingsData.map((listing) =>
+          axios.get(`/bid/get/${listing.property_id}`, {
+            headers: {
+              Authorization: `Bearer ${_token}`,
+            },
+          })
+        );
+
+        const bidsResponses = await Promise.all(bidsPromises);
+        console.log({ bidsResponses });
+        const bidsStatusData = bidsResponses.reduce((acc, res, index) => {
+          console.log({ res });
+          acc[listingsData[index].property_id] = res.data.data.bid
+            ? true
+            : false;
+          return acc;
+        }, {});
+
+        console.log("Bids Status Data:", bidsStatusData);
+        setBidsStatus(bidsStatusData);
       } catch (e) {
         setListingsError(true);
         console.log({ e });
       }
     }
     getListings();
-  }, []);
 
-  useEffect(() => {
-    console.log({ listings });
-  }, [listings]);
+    const styles = `
+      @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    `;
+    document.head.insertAdjacentHTML("beforeend", `<style>${styles}</style>`);
+  }, [_token]);
 
   const handleDeleteListing = async (id) => {
     try {
       const response = await axios.delete(`/listing/delete/${id}`, {
         headers: {
-          Authorization: `Bearer ${_token}`, // Pass token in request headers
+          Authorization: `Bearer ${_token}`,
         },
       });
-      console.log(response);
       setListings((prev) =>
         prev.filter((listing) => listing.property_id !== id)
       );
+      setBidsStatus((prev) => {
+        const updatedStatus = { ...prev };
+        delete updatedStatus[id];
+        return updatedStatus;
+      });
     } catch (e) {
       console.log(e.message);
     }
   };
+
   return (
     <div
       style={{
         padding: "3em",
         maxWidth: "90vw",
         margin: "0 auto",
-        display: "flex ",
+        display: "flex",
         flexDirection: "column",
         alignItems: "center",
         gap: "2em",
@@ -76,13 +105,14 @@ export default function Listings() {
               padding: "1em",
               maxWidth: "90vw",
               margin: "0 auto",
-              display: "flex ",
+              display: "flex",
               alignItems: "center",
               gap: "1em",
               justifyContent: "space-between",
               placeItems: "center",
               borderRadius: "10px",
               border: "1px solid black",
+              position: "relative",
             }}
           >
             <Link to={`/listing/${listing.property_id}`}>
@@ -97,7 +127,7 @@ export default function Listings() {
             </Link>
             <div
               style={{
-                display: "flex ",
+                display: "flex",
                 flexDirection: "column",
                 gap: "1em",
               }}
@@ -114,8 +144,22 @@ export default function Listings() {
                 onClick={() => handleDeleteListing(listing.property_id)}
               >
                 Delete
-              </Button>{" "}
+              </Button>
             </div>
+            {bidsStatus[listing.property_id] && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px",
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  backgroundColor: "green",
+                  animation: "blink 1s infinite",
+                }}
+              />
+            )}
           </div>
         ))}
     </div>
