@@ -3,6 +3,10 @@ const app = express();
 const cors = require("cors");
 const ExpressError = require("./expressError");
 const bodyParser = require("body-parser");
+const path = require("path");
+
+// Define __dirname at the beginning of the file
+const __dirname = path.resolve();
 
 // Parse incoming request bodies in a middleware before your handlers
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -16,7 +20,6 @@ const {
 } = require("./middleware/auth.middleware.js");
 
 app.use(express.json());
-
 app.use(authenticateJWT);
 
 const authRouter = require("./routes/auth.route.js");
@@ -27,6 +30,11 @@ const listingRouter = require("./routes/listing.route.js");
 app.use("/api/listing", listingRouter);
 const bidRouter = require("./routes/bid.route.js");
 app.use("/api/bid", ensureLoggedIn, bidRouter);
+
+app.use(express.static(path.join(__dirname, "/client/build")));
+app.use("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 // 404 handler
 app.use(function (req, res, next) {
