@@ -88,30 +88,48 @@ export default function GetBid() {
           </p>
         ) : (
           <p>
-            Bid State: <span style={{ color: "green" }}>{bid.state}</span>
+            Bid State: <span style={{ color: "grey" }}>{bid.state}</span>
           </p>
         )}
       </div>
 
       {bid.user_id === user.currentUser.id && (
-        // onClick={() => }
-        <button
-          onClick={() => {
-            handleDelete(parseInt(bid_id));
-          }}
-          style={{
-            backgroundColor: "#334155",
-            color: "white",
-            borderRadius: "0.375rem",
-            textTransform: "uppercase",
-            padding: "0.25rem",
-            cursor: "pointer",
-          }}
-          onMouseOver={(e) => (e.target.style.opacity = 0.95)}
-          onMouseOut={(e) => (e.target.style.opacity = 1)}
-        >
-          Delete Bid
-        </button>
+        <div>
+          <button
+            onClick={() => {
+              handleDelete(parseInt(bid_id));
+            }}
+            style={{
+              backgroundColor: "#ffa500",
+              color: "white",
+              borderRadius: "0.375rem",
+              textTransform: "uppercase",
+              padding: "0.25rem",
+              cursor: "pointer",
+            }}
+            onMouseOver={(e) => (e.target.style.opacity = 0.95)}
+            onMouseOut={(e) => (e.target.style.opacity = 1)}
+          >
+            Cancel Bid
+          </button>
+          <button
+            onClick={() => {
+              handleDelete(parseInt(bid_id));
+            }}
+            style={{
+              backgroundColor: "#ff0000",
+              color: "white",
+              borderRadius: "0.375rem",
+              textTransform: "uppercase",
+              padding: "0.25rem",
+              cursor: "pointer",
+            }}
+            onMouseOver={(e) => (e.target.style.opacity = 0.95)}
+            onMouseOut={(e) => (e.target.style.opacity = 1)}
+          >
+            Delete Bid
+          </button>
+        </div>
       )}
     </div>
   );

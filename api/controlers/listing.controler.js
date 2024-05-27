@@ -31,25 +31,6 @@ const create = async (req, res, next) => {
       return next(err);
     }
     console.log(req.body);
-    // Ensure required fields are provided
-    // const requiredFields = [
-    //   title,
-    //   street,
-    //   number,
-    //   city,
-    //   state,
-    //   country,
-    //   zip_code,
-    //   price,
-    //   bedrooms,
-    //   bathrooms,
-    //   garage,
-    // ];
-    // if (requiredFields.some((field) => !field)) {
-    //   throw new ExpressError("Missing required fields", 400);
-    // }
-
-    // Assuming Listing.create() method returns the newly created listing
     const listing = await Listing.create(id, {
       title,
       info,
@@ -154,5 +135,20 @@ const findListing = async (req, res, next) => {
     next(e);
   }
 };
+const getListings = async (req, res, next) => {
+  try {
+    const result = await Listing.getListings();
+    res.status(200).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
 
-module.exports = { create, get, deleteListing, updateListing, findListing };
+module.exports = {
+  create,
+  get,
+  deleteListing,
+  updateListing,
+  findListing,
+  getListings,
+};

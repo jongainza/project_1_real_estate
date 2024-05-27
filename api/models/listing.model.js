@@ -214,6 +214,41 @@ GROUP BY
       throw new Error(`Error updating listing with ID ${listingId}`);
     }
   }
+  static async getListings() {
+    try {
+      const results = await db.query(`
+    SELECT 
+        property.property_id,
+        property.title,
+        property.info,
+        property.street,
+        property.number,
+        property.city,
+        property.state,
+        property.country,
+        property.zip_code,
+        property.price,
+        property.bedrooms,
+        property.bathrooms,
+        property.garage,
+        property.user_id,
+        COALESCE(json_agg(images.image_url) FILTER (WHERE images.image_url IS NOT NULL), '[]') AS image_urls
+    FROM 
+        property
+    LEFT JOIN 
+        images ON property.property_id = images.property_id
+    GROUP BY 
+        property.property_id
+    ORDER BY 
+        property.property_id DESC;
+  `);
+      console.log({ results1: results.rows });
+      return results;
+    } catch (e) {
+      console.error("error,executing query", e.stack);
+      throw new Error("Error retrieving listings");
+    }
+  }
 }
 
 module.exports = Listing;

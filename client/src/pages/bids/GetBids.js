@@ -37,12 +37,20 @@ export default function GetBids({ property_id }) {
 
   return (
     <div>
-      <h4>Bids for Property ID: {property_id}</h4>
+      <h4>Bids for Property: {property_id}</h4>
       {bids.length > 0 ? (
-        <ul>
+        <ul
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "10px",
+          }}
+        >
           {bids.map((bid) => (
-            <li key={bid.bid_id}>
-              <Link to={`/bid/${bid.bid_id}`}>Bid Amount: ${bid.amount}</Link>
+            <li key={bid.bid_id} style={{ listStyleType: "none" }}>
+              <Link to={`/bid/${bid.bid_id}`}>
+                Bid-#{bid.bid_id} Amount: ${bid.amount}
+              </Link>
             </li>
           ))}
         </ul>
