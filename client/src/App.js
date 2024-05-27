@@ -14,6 +14,7 @@ import CreateListing from "./pages/properties/CreateListing";
 import LoggedUser from "./components/LoggedUser";
 import UpdateListing from "./pages/properties/UpdatedListing";
 import Listing from "./pages/properties/Listing";
+import GetBid from "./pages/bids/GetBid";
 // import { Provider } from "react-redux"; // Import Provider
 // import { store } from "./redux/store"; // Import your Redux store
 
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/listings" element={<Listings />} />
           <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/update-listing/:id" element={<UpdateListing />} />
+          <Route path="/bid/:bid_id" element={<GetBid />} />
         </Route>
       </Routes>
     </BrowserRouter>

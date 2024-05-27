@@ -34,9 +34,8 @@ export default function Listings() {
         console.log({ bidsResponses });
         const bidsStatusData = bidsResponses.reduce((acc, res, index) => {
           console.log({ res });
-          acc[listingsData[index].property_id] = res.data.data.bid
-            ? true
-            : false;
+          acc[listingsData[index].property_id] =
+            res.data.data.bid.length > 0 ? true : false;
           return acc;
         }, {});
 
@@ -91,7 +90,7 @@ export default function Listings() {
         gap: "2em",
       }}
     >
-      <h1 style={{ textAlign: "center", padding: "1em" }}>Your Listings</h1>
+      <h1 style={{ textAlign: "center" }}>Your Listings</h1>
       <p style={{ color: "red" }}>
         {listingsError ? "Error getting your listings" : ""}
       </p>

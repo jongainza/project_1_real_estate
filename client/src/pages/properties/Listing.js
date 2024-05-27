@@ -14,7 +14,8 @@ import {
   FaMapMarkerAlt,
   FaParking,
 } from "react-icons/fa";
-import Bid from "../bids/Bid.js";
+import CreateBid from "../bids/CreateBid.js";
+import GetBids from "../bids/GetBids.js";
 export default function Listing() {
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
@@ -23,6 +24,7 @@ export default function Listing() {
   const [copied, setCopied] = useState(false);
   const { id } = useParams(); // Get the listing ID from the URL
   const [offer, setOffer] = useState(false);
+  const [bid, setBid] = useState();
   const { currentUser, _token } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -33,11 +35,19 @@ export default function Listing() {
         const res = await axios.get(`/listing/findListing/${id}`);
         console.log({ res });
         const data = res.data;
+        console.log({ data });
         if (data.name === "error") {
           setLoading(false);
           setError(true);
           return;
         }
+        const bid = await axios.get(`/bid/get/${data.property_id}`, {
+          headers: {
+            Authorization: `Bearer ${_token}`,
+          },
+        });
+        // console.log({ bid });
+        setBid(bid);
         setLoading(false);
         setListing(data);
         setError(false);
@@ -219,7 +229,7 @@ export default function Listing() {
                 {listing.garage ? "Parking spot" : "No Parking"}
               </li>
             </ul>
-            {currentUser && listing.user_id === currentUser.id && !offer && (
+            {currentUser && listing.user_id !== currentUser.id && !offer && (
               <button
                 onClick={() => setOffer(true)}
                 style={{
@@ -236,7 +246,10 @@ export default function Listing() {
                 Make an Offer
               </button>
             )}
-            {offer && <Bid id={id} />}
+            {currentUser && listing.user_id === currentUser.id && bid && (
+              <GetBids property_id={id} />
+            )}
+            {offer && <CreateBid id={id} />}
           </div>
         </div>
       )}

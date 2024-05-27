@@ -20,7 +20,7 @@ class Bid {
       throw new ExpressError(`Error registering offer:${e.message}`);
     }
   }
-  static async get(property_id) {
+  static async getBids(property_id) {
     try {
       console.log({ property_id });
 
@@ -28,11 +28,36 @@ class Bid {
         property_id,
       ]);
       console.log({ result });
-      const bid = result.rows[0];
+      const bid = result.rows;
       console.log({ bid });
       return { bid };
     } catch (e) {
       throw new ExpressError(`Error registering offer:${e.message}`);
+    }
+  }
+  static async getBid(bid_id) {
+    try {
+      console.log({ bid_id });
+
+      const result = await db.query("SELECT * FROM bid WHERE  bid_id = $1", [
+        bid_id,
+      ]);
+      console.log({ result });
+      const bid = result.rows[0];
+      console.log({ bid });
+      return { bid };
+    } catch (e) {
+      throw new ExpressError(`Error getting bid`);
+    }
+  }
+  static async deleteBid(id) {
+    try {
+      const results = await db.query(`DELETE FROM bid WHERE bid_id=$1`, [id]);
+      console.log({ results });
+      console.log(`bid ${id} deleted!`);
+      return;
+    } catch (e) {
+      throw new ExpressError("Error deleting bid");
     }
   }
 }

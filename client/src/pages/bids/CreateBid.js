@@ -3,11 +3,13 @@ import axios from "../../helpers/axios.config";
 import CurrencyInput from "react-currency-input-field";
 import { notification } from "antd"; // Import notification from Ant Design
 import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
-export default function Bid({ id }) {
+export default function CreateBid({ id }) {
   const [amount, setAmount] = useState(0);
   const [confirm, setConfirm] = useState(false);
   const { currentUser, _token } = useSelector((state) => state.user);
+  const [redirect, setRedirect] = useState(false);
 
   const handleOfferSubmit = async () => {
     try {
@@ -20,7 +22,8 @@ export default function Bid({ id }) {
       console.log({ res });
       if (res.status === 201) {
         notification.success({ message: "Offer Sent" });
-        setConfirm(false);
+        // setConfirm(false);
+        setRedirect(true);
       } else {
         notification.error({ message: "Failed to send the offer" });
       }
@@ -31,6 +34,9 @@ export default function Bid({ id }) {
       });
     }
   };
+  if (redirect) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div>

@@ -33,17 +33,51 @@ const createBid = async (req, res, next) => {
     return next(error);
   }
 };
-const getBid = async (req, res, next) => {
+const getBids = async (req, res, next) => {
   // console.log({ prop_id: req.params.property_id });
   const property_id = parseInt(req.params.property_id, 10);
   // console.log({ property_id });
   try {
-    const bid = await Bid.get(property_id);
+    const bid = await Bid.getBids(property_id);
 
     return res.status(201).json({ data: bid });
   } catch (error) {
     return next(error);
   }
 };
+const getBid = async (req, res, next) => {
+  try {
+    let { bid_id } = req.params;
+    bid_id = parseInt(bid_id);
+    // console.log({ getBid_id: bid_id });
+    const result = await Bid.getBid(bid_id);
+    // console.log({ result9: result });
+    return res.json({ bid: result });
+  } catch (err) {
+    return next(err);
+  }
+};
+const deleteBid = async (req, res, next) => {
+  console.log({ requestedUser: req.user });
+  console.log({ reqPArams: req.params });
+  const bid = await Bid.getBid(parseInt(req.params.bid_id));
+  console.log({ bid });
+  console.log({ reqUser: req.user.id });
+  console.log({ bidUser: bid.bid.user_id });
+  if (!bid) {
+    return next(new ExpressError("Bid not found", 404));
+  }
+  if (req.user.id !== bid.bid.user_id) {
+    console.log(req.user.id);
+    return next(new ExpressError("Unhautorized to delete this bid", 401));
+  }
 
-module.exports = { createBid, getBid };
+  try {
+    await Bid.deleteBid(parseInt(req.params.bid_id));
+    return res.status(204).json({ message: "Bid deleted sucesfully" });
+  } catch (e) {
+    next(e);
+  }
+};
+
+module.exports = { createBid, getBids, getBid, deleteBid };

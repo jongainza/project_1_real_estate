@@ -122,6 +122,7 @@ GROUP BY
       // Query for the property details
       const propertyResult = await db.query(
         `SELECT 
+          p.property_id,
           p.user_id,
           p.title,
           p.info,
