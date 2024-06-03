@@ -6,20 +6,15 @@ const ExpressError = require("../expressError");
 function authenticateJWT(req, res, next) {
   try {
     // console.log({ request: req.body });
-    console.log({ token: req.body._token });
     const tokenFromBody =
       req.body._token || req.headers.authorization.split(" ")[1];
-    console.log({ tokenFromBody });
     if (!tokenFromBody) {
       return res.status(401).json({ error: "Token is missing" });
     }
     const payload = jwt.verify(tokenFromBody, SECRET_KEY);
     req.user = payload;
-    console.log({ req_user: req.user });
-    console.log("---YOU HAVE A VALID TOKEN!!!---");
     return next();
   } catch (e) {
-    // error in this middleware ins't error -- continue on
     return next();
   }
 }

@@ -1,12 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  FaCopy,
-  FaBath,
-  FaBed,
-  FaMapMarkerAlt,
-  FaParking,
-} from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 export default function ListingItem({ listing }) {
   const imageStyle = {
     height: "320px",

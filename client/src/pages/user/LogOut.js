@@ -21,7 +21,7 @@ function Logout() {
     logout();
   }, [navigate]);
 
-  return null; // Since the navigation is handled in useEffect, no need to return any JSX
+  return null;
 }
 
 export default Logout;

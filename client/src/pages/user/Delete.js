@@ -21,7 +21,6 @@ function Delete() {
         if (response.status === 204) {
           dispatch(clearUserData());
 
-          console.log("User deleted successfully");
           navigate("/");
         } else {
           throw new Error(response.statusText);
@@ -32,10 +31,9 @@ function Delete() {
     }
 
     deleteUser(); // Call the deleteUser function when the component mounts
-  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+  }, []);
 
-  // Since the component is now a functional component, you need to return null or JSX
-  return null; // or return <></> if you want an empty fragment
+  return null;
 }
 
 export default Delete;

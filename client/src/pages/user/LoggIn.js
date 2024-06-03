@@ -22,9 +22,7 @@ const Loggin = () => {
   const onFinish = async (values) => {
     try {
       const response = await axios.post("/auth/loggin", values);
-      console.log({ response });
       if (response.status === 200) {
-        console.log("YOU ARE IN!!!");
         dispatch(
           signedInUser({
             currentUser: {

@@ -21,7 +21,7 @@ const paragraphStyle = {
 export default function About() {
   return (
     <div style={aboutStyle}>
-      <h1 style={titleStyle}>About Bootstap Estate</h1>
+      <h1 style={titleStyle}>About Bootstrap Estate</h1>
       <p style={paragraphStyle}>
         Welcome to Bootstap Estate, where innovation meets excellence in the
         world of property management. Founded with a vision to redefine the real

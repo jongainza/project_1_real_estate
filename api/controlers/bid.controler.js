@@ -3,10 +3,6 @@ const Bid = require("../models/bid.model");
 
 const createBid = async (req, res, next) => {
   try {
-    console.log("Request body:", req.body);
-    console.log("Request params:", req.params);
-    console.log("Authenticated user:", req.user);
-
     const { amount, user_id } = req.body;
     const property_id = req.params.id;
     if (user_id !== req.user.id) {
@@ -34,9 +30,7 @@ const createBid = async (req, res, next) => {
   }
 };
 const getBids = async (req, res, next) => {
-  // console.log({ prop_id: req.params.property_id });
   const property_id = parseInt(req.params.property_id, 10);
-  // console.log({ property_id });
   try {
     const bid = await Bid.getBids(property_id);
 
@@ -49,21 +43,14 @@ const getBid = async (req, res, next) => {
   try {
     let { bid_id } = req.params;
     bid_id = parseInt(bid_id);
-    // console.log({ getBid_id: bid_id });
     const result = await Bid.getBid(bid_id);
-    // console.log({ result9: result });
     return res.json({ bid: result });
   } catch (err) {
     return next(err);
   }
 };
 const deleteBid = async (req, res, next) => {
-  console.log({ requestedUser: req.user });
-  console.log({ reqPArams: req.params });
   const bid = await Bid.getBid(parseInt(req.params.bid_id));
-  console.log({ bid });
-  console.log({ reqUser: req.user.id });
-  console.log({ bidUser: bid.bid.user_id });
   if (!bid) {
     return next(new ExpressError("Bid not found", 404));
   }

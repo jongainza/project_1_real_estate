@@ -8,34 +8,16 @@ const updateUserSchema = require("../schemas/user/updateUser.schema.json");
 
 const updateUser = async (req, res, next) => {
   try {
-    // Assuming req.body contains the form data
     const { username, email, password, photo } = req.body;
     const { id } = req.user;
-    console.log({ id });
-    // hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
-    // req.body.password = hashedPassword;
-    console.log(username, email, password, id, photo);
-    // console.log({ id });
-    // Check each field and prepare the data for updating
     const newData = { username, email, id, photo };
-
-    // if (username !== "") {
-    //   newData.username = username;
-    // }
-
-    // if (email !== "") {
-    //   newData.email = email;
-    // }
-    // console.log({ newData });
 
     if (password !== undefined) {
       // Hash the new password and update
       newData.password = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
     }
-    console.log({ newData });
 
     const result = jsonschema.validate(newData, updateUserSchema);
-    console.log({ result });
 
     if (!result.valid) {
       // pass validation erros to error handler
@@ -46,7 +28,6 @@ const updateUser = async (req, res, next) => {
 
     // // Update the user record in the database
     const updatedUser = await User.updateUser(id, newData);
-    console.log({ updatedUser });
     return res.status(201).json({
       updatedUser,
     });

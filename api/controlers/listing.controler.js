@@ -20,7 +20,7 @@ const create = async (req, res, next) => {
       bedrooms,
       bathrooms,
       garage,
-      images, // Assuming all image URLs are passed in an array
+      images,
     } = req.body;
     const { id } = req.user;
     // Validate request body against JSON schema
@@ -66,15 +66,11 @@ const get = async (req, res, next) => {
 };
 
 const deleteListing = async (req, res, next) => {
-  console.log({ requestedUser: req.user });
   const listing = await Listing.findListing(req.params.id);
-  console.log({ listing });
   if (!listing) {
     return next(new ExpressError("listing not found", 404));
   }
   if (req.user.id !== listing.user_id) {
-    console.log(req.user.id);
-    console.log(listing.user_id);
     return next(new ExpressError("Unable to delete this listing", 401));
   }
 
@@ -87,9 +83,7 @@ const deleteListing = async (req, res, next) => {
 };
 const updateListing = async (req, res, next) => {
   const listingId = req.params.id;
-  console.log({ listingId });
   const updatedFields = req.body;
-  console.log({ updatedFields });
   const listing = await Listing.findListing(listingId);
   // console.log({ listing });
   //   console.log({ reqUser: req.user.id });
@@ -111,7 +105,6 @@ const updateListing = async (req, res, next) => {
       delete updatedFields.images;
     }
     // Update the remaining fields in the property table
-    console.log("hello");
     delete updatedFields._token;
     const updatedListing = await Listing.updateListing(
       listingId,
@@ -125,9 +118,7 @@ const updateListing = async (req, res, next) => {
 const findListing = async (req, res, next) => {
   const { id } = req.params;
   try {
-    console.log({ id });
     const result = await Listing.findListing(id);
-    console.log({ result });
     // let listing = result.rows[0];
     // console.log({ listing });
     res.status(200).json(result);

@@ -34,8 +34,6 @@ class User {
   static async updateUser(id, newData) {
     try {
       const { username, email, password, photo } = newData;
-      console.log({ newData });
-      console.log("hello");
 
       let query = `UPDATE users 
                  SET username = $1,
@@ -55,7 +53,6 @@ class User {
                RETURNING user_id as id, username, email, photo`;
 
       const response = await db.query(query, [...queryParams, id]);
-      console.log("hellp");
 
       if (!response.rows.length) {
         throw new ExpressError(`User with ID ${id} not found`, 404);
@@ -76,7 +73,6 @@ class User {
       const results = await db.query(`DELETE FROM users WHERE user_id=$1`, [
         id,
       ]);
-      console.log("user deleted!");
       return;
     } catch (e) {
       throw new ExpressError("Error deleting user");

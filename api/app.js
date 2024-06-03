@@ -5,9 +5,6 @@ const ExpressError = require("./expressError");
 const bodyParser = require("body-parser");
 const path = require("path");
 
-// Define __dirname at the beginning of the file
-const __dirname = path.resolve();
-
 // Parse incoming request bodies in a middleware before your handlers
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));

@@ -31,19 +31,15 @@ export default function Listings() {
         );
 
         const bidsResponses = await Promise.all(bidsPromises);
-        console.log({ bidsResponses });
         const bidsStatusData = bidsResponses.reduce((acc, res, index) => {
-          console.log({ res });
           acc[listingsData[index].property_id] =
             res.data.data.bid.length > 0 ? true : false;
           return acc;
         }, {});
 
-        console.log("Bids Status Data:", bidsStatusData);
         setBidsStatus(bidsStatusData);
       } catch (e) {
         setListingsError(true);
-        console.log({ e });
       }
     }
     getListings();

@@ -8,7 +8,6 @@ class Image {
         "INSERT INTO images (property_id, image_url) VALUES ($1, $2)",
         [listingId, imageUrl]
       );
-      console.log("image added!");
       return;
     } catch (e) {
       throw new ExpressError("Error adding image");
@@ -19,7 +18,6 @@ class Image {
       const results = await db.query(`DELETE FROM image WHERE image_id=$1`, [
         imageId,
       ]);
-      console.log("image deleted!");
       return;
     } catch (e) {
       throw new ExpressError("Error deleting image");

@@ -4,8 +4,6 @@ const ExpressError = require("../expressError");
 class Listing {
   static async create(id, fields) {
     try {
-      // console.log({ id });
-      // console.log({ id, fields });
       const results = await db.query(
         `INSERT INTO property (title,info,street,number,city,state,country,zip_code,price,bedrooms,bathrooms,garage,user_id)  
             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
@@ -74,48 +72,11 @@ GROUP BY
     p.property_id;`,
         [id]
       );
-      console.log({ results });
       return results;
     } catch (e) {
       return e;
     }
   }
-  //   // finds a listing by id
-  //   static async findListing(id) {
-  //     try {
-  //       const results = await db.query(
-  //         `SELECT
-  //     p.user_id,
-  //     p.title,
-  //     p.info,
-  //     p.street,
-  //     p.number,
-  //     p.city,
-  //     p.state,
-  //     p.country,
-  //     p.zip_code,
-  //     p.price,
-  //     p.bedrooms,
-  //     p.bathrooms,
-  //     p.garage,
-  //     i.image_url
-  // FROM
-  //     property p
-  // JOIN
-  //     images i ON p.property_id = i.property_id
-  // WHERE
-  //     p.property_id = $1`,
-  //         [id]
-  //       );
-  //       console.log(id);
-  //       // let response = results.rows[0];
-  //       // console.log({ results: results.rows[0] });
-
-  //       return results;
-  //     } catch (e) {
-  //       return e;
-  //     }
-  //   }
   // finds a listing by id
   static async findListing(id) {
     try {
@@ -142,14 +103,12 @@ GROUP BY
           p.property_id = $1`,
         [id]
       );
-      // console.log({ propertyResult });
       // If no property is found, return an appropriate response
       if (propertyResult.rows.length === 0) {
         return { error: "Property not found" };
       }
 
       const property = propertyResult.rows[0];
-      console.log({ property });
 
       // Query for the images
       const imagesResult = await db.query(
@@ -161,13 +120,11 @@ GROUP BY
           i.property_id = $1`,
         [id]
       );
-      console.log({ imagesResult });
       // Combine the property details and images
       const listing = {
         ...property,
         images: imagesResult.rows.map((row) => row.image_url),
       };
-      console.log({ listing });
       return listing;
     } catch (e) {
       return e;
@@ -180,7 +137,6 @@ GROUP BY
         `DELETE FROM property WHERE property_id=$1`,
         [id]
       );
-      console.log("listing deleted!");
       return;
     } catch (e) {
       throw new ExpressError("Error deleting user");
@@ -188,7 +144,6 @@ GROUP BY
   }
   static async updateListing(listingId, updatedFields) {
     try {
-      console.log({ updatedFields });
       // Construct the SET clause dynamically based on updatedFields
       const setClause = Object.keys(updatedFields)
         .map((key, index) => `${key} = $${index + 1}`)
@@ -207,7 +162,6 @@ GROUP BY
       // Execute the query
       const results = await db.query(query);
 
-      console.log(`Listing with ID ${listingId} updated successfully`);
       return results.rows[0];
     } catch (error) {
       console.error(`Error updating listing with ID ${listingId}:`, error);
@@ -242,7 +196,6 @@ GROUP BY
     ORDER BY 
         property.property_id DESC;
   `);
-      console.log({ results1: results.rows });
       return results;
     } catch (e) {
       console.error("error,executing query", e.stack);

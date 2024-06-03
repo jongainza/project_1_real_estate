@@ -36,8 +36,6 @@ const register = async (req, res, next) => {
 
     const data = await User.register(username, email, hashedPassword, photo);
 
-    // const _token = jwt.sign({ id: data.id }, SECRET_KEY);
-
     return res.status(201).json({
       data,
     });
@@ -60,10 +58,6 @@ const loggin = async (req, res, next) => {
       throw new ExpressError("Username and password required", 400);
     }
     const user = await User.getUser(username);
-    // console.log({ user });
-    // console.log({ password });
-    // console.log(user.password);
-    // console.log({ id: user.id });
 
     if (user) {
       if (await bcrypt.compare(password, user.password)) {

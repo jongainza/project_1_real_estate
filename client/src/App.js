@@ -15,8 +15,6 @@ import LoggedUser from "./components/LoggedUser";
 import UpdateListing from "./pages/properties/UpdatedListing";
 import Listing from "./pages/properties/Listing";
 import GetBid from "./pages/bids/GetBid";
-// import { Provider } from "react-redux"; // Import Provider
-// import { store } from "./redux/store"; // Import your Redux store
 
 export default function App() {
   return (
